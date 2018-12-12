@@ -12,9 +12,8 @@ def get_data(filename):
 class MyException(Exception):
     pass
 
-def pugalo(list_to_sort):
+def pugalo(list_to_sort, razmah):
 
-    global razmah
     count = 0
     M = {}
 
@@ -35,24 +34,26 @@ def pugalo(list_to_sort):
 
     return 'YES'
 
-numbers = get_data('input.txt')
+def main():
+    numbers = get_data('input.txt')
+    matreshki = list(map(int, numbers[1]))
+    data2 = list(map(int, numbers[0]))
+    razmah = data2[1]
+    assert data2[0] == len(matreshki), 'Invalid data: massive length does not match data in input'
 
-matreshki = list(map(int, numbers[1]))
-data2 = list(map(int, numbers[0]))
-razmah = data2[1]
-assert data2[0] == len(matreshki), 'Invalid data: massive length does not match data in input'
+    if razmah == 1:
+        finish = 'YES'
+    else:
+        try:
+            finish = pugalo(matreshki, razmah)
+        except MyException:
+            finish = 'NO'
 
-if razmah == 1:
-    finish = 'YES'
-else:
+    fh = None
     try:
-        finish = pugalo(matreshki)
-    except MyException:
-        finish = 'NO'
+        with open('output.txt', 'w') as fh:
+            fh.write(finish)
+    except EnvironmentError as err:
+        print(err)
 
-fh = None
-try:
-    with open('output.txt', 'w') as fh:
-        fh.write(finish)
-except EnvironmentError as err:
-    print(err)
+main()
